@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "332818656405",
+    "project_id": "glassy-augury-311910",
+    "storage_bucket": "glassy-augury-311910.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:332818656405:android:8fdb59b82c515384c9bf9c",
+        "android_client_info": {
+          "package_name": "com.example.firebase"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "332818656405-1blfv3a0j4scphrnnluqa76rfm9a4gu6.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.firebase",
+            "certificate_hash": "590f2c54574f68447cf2684459209590db7b30e0"
+          }
+        },
+        {
+          "client_id": "332818656405-r43gvvovpr50p5ra9pn3llinmks7uqbg.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBxGNuEFJtgclumCl58RPUKf3VbFnA2L58"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "332818656405-r43gvvovpr50p5ra9pn3llinmks7uqbg.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
