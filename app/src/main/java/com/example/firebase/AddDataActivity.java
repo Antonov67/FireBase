@@ -28,7 +28,9 @@ import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.sql.DatabaseMetaData;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class AddDataActivity extends AppCompatActivity {
 
@@ -90,12 +92,26 @@ public class AddDataActivity extends AppCompatActivity {
     }
 
     public void click(View view) {
+//        reference.child(user.getUid()).get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
+//            @Override
+//            public void onComplete(@NonNull Task<DataSnapshot> task) {
+//                if (!task.isSuccessful()) {
+//                    Log.e("777", "Error getting data", task.getException());
+//                }
+//                else {
+//                    Log.d("777", String.valueOf(task.getResult().getValue()));
+//                }
+//            }
+//        });
+
         reference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                GenericTypeIndicator<List<LostThing>> lostThings = new GenericTypeIndicator<List<LostThing>>() {};
-                List<LostThing> things = snapshot.child("data").getValue(lostThings);
-                Toast.makeText(AddDataActivity.this, things.toString(), Toast.LENGTH_SHORT).show();
+                HashMap<String, LostThing> hashMap = (HashMap<String, LostThing>) snapshot.child(user.getUid()).getValue();
+                Log.d("777", hashMap.keySet().toString());
+                for (Map.Entry entry: hashMap.entrySet()) {
+                    Log.d("777",entry + "");
+                }
             }
 
             @Override
@@ -103,5 +119,10 @@ public class AddDataActivity extends AppCompatActivity {
 
             }
         });
+
+
+
+
+
     }
 }
