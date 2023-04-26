@@ -11,25 +11,17 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
-import com.google.firebase.FirebaseApp;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.GenericTypeIndicator;
 import com.google.firebase.database.ValueEventListener;
-import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 
-import java.sql.DatabaseMetaData;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 public class AddDataActivity extends AppCompatActivity {
@@ -99,19 +91,25 @@ public class AddDataActivity extends AppCompatActivity {
 //                    Log.e("777", "Error getting data", task.getException());
 //                }
 //                else {
-//                    Log.d("777", String.valueOf(task.getResult().getValue()));
+//                    Log.d("777","get"+ String.valueOf(task.getResult().getValue()));
 //                }
 //            }
 //        });
 
+
         reference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                HashMap<String, LostThing> hashMap = (HashMap<String, LostThing>) snapshot.child(user.getUid()).getValue();
-                Log.d("777", hashMap.keySet().toString());
-                for (Map.Entry entry: hashMap.entrySet()) {
-                    Log.d("777",entry + "");
+//                HashMap<String, LostThing> hashMap = (HashMap<String, LostThing>) snapshot.child(user.getUid()).getValue();
+//                Log.d("777", hashMap.keySet().toString());
+//                for (Map.Entry entry: hashMap.entrySet()) {
+//                    Log.d("777",entry.getValue() + "");
+//                }
+                for (DataSnapshot ds : snapshot.child(user.getUid()).getChildren()) {
+                    LostThing lostThing = ds.getValue(LostThing.class);
+                    Log.d("777", lostThing.toString());
                 }
+
             }
 
             @Override
