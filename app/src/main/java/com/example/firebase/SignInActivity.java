@@ -80,6 +80,7 @@ public class SignInActivity extends AppCompatActivity {
                                     if (task.isSuccessful()) {
                                         // User signed in successfully
                                         Toast.makeText(SignInActivity.this, "вход выполнен", Toast.LENGTH_SHORT).show();
+                                        startActivity(new Intent(SignInActivity.this, AddDataActivity.class));
                                     }
                                 }
                             }).addOnFailureListener(new OnFailureListener() {
@@ -94,22 +95,22 @@ public class SignInActivity extends AppCompatActivity {
 
 
 
-        Map<String, Object> users = new HashMap<>();
-        users.put("name","Dima");
-        users.put("surname","Antonov");
-        users.put("position","teacher");
-
-        firestore.collection("users").add(users).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
-            @Override
-            public void onSuccess(DocumentReference documentReference) {
-                Toast.makeText(SignInActivity.this, "Ready", Toast.LENGTH_SHORT).show();
-            }
-        }).addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception e) {
-                Toast.makeText(SignInActivity.this, "Not ready", Toast.LENGTH_SHORT).show();
-            }
-        });
+//        Map<String, Object> users = new HashMap<>();
+//        users.put("name","Dima");
+//        users.put("surname","Antonov");
+//        users.put("position","teacher");
+//
+//        firestore.collection("users").add(users).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+//            @Override
+//            public void onSuccess(DocumentReference documentReference) {
+//                Toast.makeText(SignInActivity.this, "Ready", Toast.LENGTH_SHORT).show();
+//            }
+//        }).addOnFailureListener(new OnFailureListener() {
+//            @Override
+//            public void onFailure(@NonNull Exception e) {
+//                Toast.makeText(SignInActivity.this, "Not ready", Toast.LENGTH_SHORT).show();
+//            }
+//        });
 
 
 
