@@ -17,6 +17,7 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 
@@ -28,6 +29,7 @@ public class SignInActivity extends AppCompatActivity {
 
     FirebaseFirestore firestore;
     FirebaseAuth firebaseAuth;
+    FirebaseUser user;
 
     EditText email, pswrd;
     Button signInButton, regButton;
@@ -60,7 +62,8 @@ public class SignInActivity extends AppCompatActivity {
                 if (firebaseAuth.getCurrentUser() != null) {
                     // Already signed in
                     // Do nothing
-                    Toast.makeText(SignInActivity.this, "вы уже вошли!", Toast.LENGTH_SHORT).show();
+                    user = FirebaseAuth.getInstance().getCurrentUser();
+                    Toast.makeText(SignInActivity.this, user.getEmail() +  ", вы уже вошли!", Toast.LENGTH_SHORT).show();
                     Log.d("777", "вход1");
 
                     //проверим на непустоту полей и корректность шаблона почты
@@ -109,14 +112,7 @@ public class SignInActivity extends AppCompatActivity {
         });
 
 
-//        firebaseAuth.createUserWithEmailAndPassword("email@email.ru","123456").addOnCompleteListener(new OnCompleteListener<AuthResult>() {
-//            @Override
-//            public void onComplete(@NonNull Task<AuthResult> task) {
-//                if(task.isSuccessful()){
-//                    Toast.makeText(SignInActivity.this, "user add", Toast.LENGTH_SHORT).show();
-//                }
-//            }
-//        });
+
 
 
 
