@@ -21,6 +21,7 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.GenericTypeIndicator;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -78,12 +79,29 @@ public class AddDataActivity extends AppCompatActivity {
 //                         Toast.makeText(AddDataActivity.this, "Не добавлено", Toast.LENGTH_SHORT).show();
 //                     }
 //                 });
-
-                reference.child("data").child(user.getUid()).setValue(lostThing);
+                //добавим данные в БД  - realtime Database
+                String id = reference.push().getKey();
+                reference.child(user.getUid()).child(id).setValue(lostThing);
             }
         });
 
 
 
+    }
+
+    public void click(View view) {
+        reference.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                GenericTypeIndicator<List<LostThing>> lostThings = new GenericTypeIndicator<List<LostThing>>() {};
+                List<LostThing> things = snapshot.child("data").getValue(lostThings);
+                Toast.makeText(AddDataActivity.this, things.toString(), Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
     }
 }
