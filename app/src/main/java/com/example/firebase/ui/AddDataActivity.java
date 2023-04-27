@@ -1,28 +1,20 @@
-package com.example.firebase;
+package com.example.firebase.ui;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
+import com.example.firebase.R;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
-
-import java.util.HashMap;
-import java.util.Map;
 
 public class AddDataActivity extends AppCompatActivity {
 
@@ -33,7 +25,7 @@ public class AddDataActivity extends AppCompatActivity {
     FirebaseDatabase database;
 
     EditText city, description, name;
-    Button addButton;
+    Button addButton, showDataButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,6 +36,7 @@ public class AddDataActivity extends AppCompatActivity {
         description = findViewById(R.id.description);
         name = findViewById(R.id.name);
         addButton = findViewById(R.id.add_button);
+        showDataButton = findViewById(R.id.to_show_data_button);
 
         firestore = FirebaseFirestore.getInstance();
         database = FirebaseDatabase.getInstance();
@@ -51,6 +44,13 @@ public class AddDataActivity extends AppCompatActivity {
         firebaseAuth = FirebaseAuth.getInstance();
         user = FirebaseAuth.getInstance().getCurrentUser();
         reference = database.getReference("data");
+
+        showDataButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(AddDataActivity.this, ShowDataActivity.class));
+            }
+        });
 
         //добавим запись
         addButton.setOnClickListener(new View.OnClickListener() {
@@ -62,6 +62,8 @@ public class AddDataActivity extends AppCompatActivity {
                         description.getText().toString(),
                         name.getText().toString(),
                         user.getEmail());
+
+                 //добавление данных, если база данных НЕ realtime
 //                 firestore.collection("data").add(lostThing).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
 //                     @Override
 //                     public void onSuccess(DocumentReference documentReference) {
@@ -73,6 +75,7 @@ public class AddDataActivity extends AppCompatActivity {
 //                         Toast.makeText(AddDataActivity.this, "Не добавлено", Toast.LENGTH_SHORT).show();
 //                     }
 //                 });
+
                 //добавим данные в БД  - realtime Database
                 String id = reference.push().getKey();
                 reference.child(user.getUid()).child(id).setValue(lostThing);
@@ -83,44 +86,5 @@ public class AddDataActivity extends AppCompatActivity {
 
     }
 
-    public void click(View view) {
-//        reference.child(user.getUid()).get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
-//            @Override
-//            public void onComplete(@NonNull Task<DataSnapshot> task) {
-//                if (!task.isSuccessful()) {
-//                    Log.e("777", "Error getting data", task.getException());
-//                }
-//                else {
-//                    Log.d("777","get"+ String.valueOf(task.getResult().getValue()));
-//                }
-//            }
-//        });
 
-
-        reference.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-//                HashMap<String, LostThing> hashMap = (HashMap<String, LostThing>) snapshot.child(user.getUid()).getValue();
-//                Log.d("777", hashMap.keySet().toString());
-//                for (Map.Entry entry: hashMap.entrySet()) {
-//                    Log.d("777",entry.getValue() + "");
-//                }
-                for (DataSnapshot ds : snapshot.child(user.getUid()).getChildren()) {
-                    LostThing lostThing = ds.getValue(LostThing.class);
-                    Log.d("777", lostThing.toString());
-                }
-
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-
-            }
-        });
-
-
-
-
-
-    }
 }

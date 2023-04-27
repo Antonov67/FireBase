@@ -1,4 +1,4 @@
-package com.example.firebase;
+package com.example.firebase.ui;
 
 import android.widget.EditText;
 
