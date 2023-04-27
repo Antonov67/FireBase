@@ -13,10 +13,22 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textStyle="bold"
-        android:text="TextView" />
+        android:text="жми на кнопку" />
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/all_rec_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="все записи" />
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/rec_by_user_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="записи юзера" />
 
     <ListView
         android:id="@+id/list"
         android:layout_width="409dp"
-        android:layout_height="663dp" />
+        android:layout_height="wrap_content" />
 </LinearLayout>

@@ -5,6 +5,8 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -21,7 +23,9 @@ import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class ShowDataActivity extends AppCompatActivity {
 
@@ -35,6 +39,8 @@ public class ShowDataActivity extends AppCompatActivity {
 
     TextView userIdText;
     ListView listView;
+    Button allRecButton, recByUserButton;
+    List<LostThing> lostThings;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,6 +49,8 @@ public class ShowDataActivity extends AppCompatActivity {
 
         listView = findViewById(R.id.list);
         userIdText = findViewById(R.id.text_user_id);
+        allRecButton = findViewById(R.id.all_rec_button);
+        recByUserButton = findViewById(R.id.rec_by_user_button);
 
         firestore = FirebaseFirestore.getInstance();
         database = FirebaseDatabase.getInstance();
@@ -51,6 +59,10 @@ public class ShowDataActivity extends AppCompatActivity {
         user = FirebaseAuth.getInstance().getCurrentUser();
         reference = database.getReference("data");
 
+
+        lostThings = new ArrayList<>();
+        adapter = new LostThingAdapter(ShowDataActivity.this, R.layout.item_layout, lostThings);
+        listView.setAdapter(adapter);
 
 
 
@@ -68,29 +80,69 @@ public class ShowDataActivity extends AppCompatActivity {
 //            }
 //        });
 
-
-        reference.addValueEventListener(new ValueEventListener() {
+        allRecButton.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                //  в цикле получим все данные текущего юзера
-                List<LostThing> lostThings = new ArrayList<>();
-                for (DataSnapshot ds : snapshot.child(user.getUid()).getChildren()) {
-                    LostThing lostThing = ds.getValue(LostThing.class);
-                    lostThings.add(lostThing);
-                    Log.d("777", lostThing.toString());
-                }
+            public void onClick(View view) {
 
-                userIdText.setText(user.getEmail() + "\n" + user.getUid());
+                reference.addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot snapshot) {
 
-                adapter = new LostThingAdapter(ShowDataActivity.this, R.layout.item_layout, lostThings);
-                listView.setAdapter(adapter);
+                       //получим все данные по всем юзерам
+                        HashMap<String,LostThing> hashMap = (HashMap<String, LostThing>) snapshot.getValue();
+                        // Log.d("777", hashMap.keySet().toString());
+                        lostThings.clear();
+                        for (String s : hashMap.keySet()){
+                            for (DataSnapshot ds : snapshot.child(s).getChildren()) {
+                                LostThing lostThing = ds.getValue(LostThing.class);
+                                lostThings.add(lostThing);
+                                Log.d("777", "allRec: " + lostThing.toString());
+                            }
+                        }
+                        userIdText.setText("все записи");
+                        adapter.notifyDataSetChanged();
 
-            }
 
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-                Toast.makeText(ShowDataActivity.this, "Данные не получаются(((", Toast.LENGTH_SHORT).show();
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {
+                        Toast.makeText(ShowDataActivity.this, "Данные не получаются(((", Toast.LENGTH_SHORT).show();
+                    }
+                });
+
             }
         });
+
+        recByUserButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                reference.addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                        //  в цикле получим все данные текущего юзера
+                        lostThings.clear();
+                        for (DataSnapshot ds : snapshot.child(user.getUid()).getChildren()) {
+                            LostThing lostThing = ds.getValue(LostThing.class);
+                            lostThings.add(lostThing);
+                            Log.d("777", lostThing.toString());
+                        }
+
+                        userIdText.setText(user.getEmail() + "\n" + user.getUid());
+
+                       adapter.notifyDataSetChanged();
+
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {
+                        Toast.makeText(ShowDataActivity.this, "Данные не получаются(((", Toast.LENGTH_SHORT).show();
+                    }
+                });
+            }
+        });
+
+
+
     }
 }
