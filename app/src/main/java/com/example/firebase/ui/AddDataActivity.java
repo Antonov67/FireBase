@@ -171,6 +171,10 @@ public class AddDataActivity extends AppCompatActivity {
                         public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
                             progressDialog.dismiss();
                             Toast.makeText(AddDataActivity.this, "Uploaded", Toast.LENGTH_SHORT).show();
+                            city.setText("");
+                            name.setText("");
+                            description.setText("");
+                            image.setImageResource(0);
                         }
                     })
                     .addOnFailureListener(new OnFailureListener() {
