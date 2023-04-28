@@ -10,6 +10,7 @@ import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -94,14 +95,17 @@ public class AddDataActivity extends AppCompatActivity {
                 Toast.makeText(AddDataActivity.this, "add start", Toast.LENGTH_SHORT).show();
 
                 //генерим ссылку для фото
-                StorageReference ref = storageReference.child("images/"+ UUID.randomUUID().toString());
+                String r = UUID.randomUUID().toString();
+                StorageReference ref = storageReference.child("images/"+ r);
+
+                Log.d("777", "ref: " + ref.toString());
 
                 LostThing lostThing = new LostThing(
                         city.getText().toString(),
                         description.getText().toString(),
                         name.getText().toString(),
                         user.getEmail(),
-                        ref.toString());
+                        "images/"+ r);
 
                  //добавление данных, если база данных НЕ realtime
 //                 firestore.collection("data").add(lostThing).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
