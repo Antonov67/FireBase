@@ -27,7 +27,7 @@ public class SignInActivity extends AppCompatActivity {
     FirebaseUser user;
 
     EditText email, pswrd;
-    Button signInButton, regButton;
+    Button signInButton, regButton, signOutButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,11 +42,22 @@ public class SignInActivity extends AppCompatActivity {
         pswrd = findViewById(R.id.pswrd_sign_in);
         signInButton = findViewById(R.id.sign_in_button);
         regButton = findViewById(R.id.reg_button);
+        signOutButton = findViewById(R.id.sign_out_button);
 
         regButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 startActivity(new Intent(SignInActivity.this, SignUpActivity.class));
+            }
+        });
+
+        signOutButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                FirebaseAuth.getInstance().signOut();// разлогинимся
+                email.setText("");
+                pswrd.setText("");
+                Toast.makeText(SignInActivity.this, "Вы вышли из аккаунта", Toast.LENGTH_SHORT).show();
             }
         });
 
